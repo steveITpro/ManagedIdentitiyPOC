@@ -2,6 +2,7 @@ targetScope = 'subscription'
 
 param location string = 'ukwest'
 param resourceGroupName string
+param managedIdentityName string = 'GCS_ManagedIdentity'
 param tags object = {
   tagName1: 'tagValue1'
   tagName2: 'tagValue2'
@@ -19,5 +20,4 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-
   name: '${managedIdentityName}${uniqueSuffix}'
   location: location
   tags: tags
-  scope: rg
 }
