@@ -1,4 +1,4 @@
-name: Deploy Managed Identity
+name: Deploy Resource Group
 on: [push]
 
 permissions:
@@ -21,4 +21,4 @@ jobs:
 
     - name: Deploy Bicep
       run: |
-        az deployment sub create --location ukwest --template-file filename.bicep --parameters ManagedID.parameters.json subscriptionId="${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        az deployment sub create --location ukwest --template-file resourceGroup.bicep --parameters resourceGroup.parameters.json
