@@ -9,9 +9,15 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
+// Specify existing resource group context for managed identity
+resource existingRg 'Microsoft.Resources/resourceGroups@2021-04-01' existing = {
+  name: rg.name
+}
+
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: '${userAssignedIdentities_GCS_ManagedIdentitiy_name}${uniqueSuffix}'
   location: location
+  scope: existingRg
 }
 
 resource federatedIdentityCredentials 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
