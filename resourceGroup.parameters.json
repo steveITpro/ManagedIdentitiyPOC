@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "managedIdentityName": {
-      "value": "GCS_ManagedIdentity"
+      "value": "GCS_ManagedIdentity2023"
     }
   }
 }
