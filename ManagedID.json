@@ -3,7 +3,7 @@
         "value": "ukwest"
     },
     "userAssignedIdentities_GCS_ManagedIdentitiy_name": {
-        "value": "GCS_ManagedIdentitiy"
+        "value": "GCS_ManagedIdentitiy3"
     },
     "resourceGroupName": {
         "value": "MyNewResourceGroup"
