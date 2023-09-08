@@ -7,7 +7,6 @@ param tags object = {
   tagName1: 'tagValue1'
   tagName2: 'tagValue2'
 }
-param subscriptionId string
 
 var uniqueSuffix = substring(uniqueString(deployment().name), 0, 3)
 var managedIdentityName = '${userAssignedIdentities_GCS_ManagedIdentitiy_name}${uniqueSuffix}'
@@ -21,6 +20,7 @@ resource newManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@20
   name: managedIdentityName
   location: location
   tags: tags
+  scope: resourceGroup(rg.name)
 }
 
 resource federatedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
@@ -33,4 +33,5 @@ resource federatedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities/fed
       'api://AzureADTokenExchange'
     ]
   }
+  scope: resourceGroup(rg.name)
 }
