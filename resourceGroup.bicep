@@ -14,3 +14,10 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
   tags: tags
 }
+
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+  name: '${managedIdentityName}${uniqueSuffix}'
+  location: location
+  tags: tags
+  scope: rg
+}
