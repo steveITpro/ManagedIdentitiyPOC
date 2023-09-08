@@ -1,3 +1,8 @@
 {
-    "userAssignedIdentities_GCS_ManagedIdentitiy_name": "GCS_ManagedIdentitiy2"
+    "location": {
+        "value": "ukwest"
+    },
+    "userAssignedIdentities_GCS_ManagedIdentitiy_name": {
+        "value": "GCS_ManagedIdentitiy"
+    }
 }
