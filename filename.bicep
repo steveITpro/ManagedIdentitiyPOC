@@ -1,25 +1,20 @@
-name: Run Azure Login with OpenID Connect
-on: [push]
+param userAssignedIdentities_GCS_ManagedIdentitiy_name string = 'GCS_ManagedIdentitiy'
 
-permissions:
-  id-token: write
-  contents: read
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+  name: userAssignedIdentities_GCS_ManagedIdentitiy_name
+  location: 'ukwest'
+}
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: 'Checkout code'
-      uses: actions/checkout@v2
-
-    - name: 'Az CLI login'
-      uses: azure/login@v1
-      with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    - name: Deploy ARM template
-      run: |
-        az deployment sub create --location ukwest --template-file path_to_arm_template.json
+resource federatedIdentityCredentials 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
+  name: '${managedIdentity.name}/ManagedIdentitiyPOC'
+  properties: {
+    issuer: 'https://token.actions.githubusercontent.com'
+    subject: 'repo:steveITpro/ManagedIdentitiyPOC:ref:refs/heads/Main'
+    audiences: [
+      'api://AzureADTokenExchange'
+    ]
+  }
+  dependsOn: [
+    managedIdentity
+  ]
+}
