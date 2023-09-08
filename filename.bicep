@@ -10,14 +10,16 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-// Reference to an existing Managed Identity
-resource symbolicname 'Microsoft.ManagedIdentity/identities@2023-01-31' existing = {
+// Create a new Managed Identity
+resource newManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: managedIdentityName
+  location: location
 }
 
-resource federatedIdentityCredentials 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
-  parent: symbolicname
+// Creating federatedIdentityCredentials as a child of the new managed identity
+resource federatedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
   name: 'ManagedIdentitiyPOC${uniqueSuffix}'
+  parent: newManagedIdentity
   properties: {
     issuer: 'https://token.actions.githubusercontent.com'
     subject: 'repo:steveITpro/ManagedIdentitiyPOC:ref:refs/heads/Main'
