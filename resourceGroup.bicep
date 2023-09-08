@@ -20,4 +20,3 @@ resource federatedCredentials 'Microsoft.ManagedIdentity/userAssignedIdentities/
     managedIdentity
   ]
 }
-
