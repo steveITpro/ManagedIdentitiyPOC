@@ -16,6 +16,9 @@
         "tagName1": "tagValue1",
         "tagName2": "tagValue2"
       }
+    },
+    "subscriptionId": {
+      "value": "<PLACEHOLDER_FOR_AZURE_SUBSCRIPTION_ID>"
     }
   }
 }
