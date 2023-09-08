@@ -4,5 +4,8 @@
     },
     "userAssignedIdentities_GCS_ManagedIdentitiy_name": {
         "value": "GCS_ManagedIdentitiy"
+    },
+    "resourceGroupName": {
+        "value": "MyNewResourceGroup"
     }
 }
