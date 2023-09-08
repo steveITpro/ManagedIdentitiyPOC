@@ -1,4 +1,4 @@
-param userAssignedIdentities_GCS_ManagedIdentitiy_name string = 'GCS_ManagedIdentitiy'
+param userAssignedIdentities_GCS_ManagedIdentitiy_name string = json(loadTextContent('./ManagedID.json')).userAssignedIdentities_GCS_ManagedIdentitiy_name
 
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: userAssignedIdentities_GCS_ManagedIdentitiy_name
