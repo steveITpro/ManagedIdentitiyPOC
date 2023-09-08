@@ -5,6 +5,9 @@
     "resourceGroupName": {
       "value": "GCS_ManagedIdentitytest"
     },
+    "managedIdentityName": {
+      "value": "GCS_ManagedIdentity"
+    },
     "tags": {
       "value": {
         "tagName1": "tagValue1",
