@@ -3,24 +3,21 @@ param userAssignedIdentities_GCS_ManagedIdentitiy_name string
 param resourceGroupName string
 
 var uniqueSuffix = substring(uniqueString(deployment().name), 0, 3)
+var managedIdentityName = '${userAssignedIdentities_GCS_ManagedIdentitiy_name}${uniqueSuffix}'
 
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${resourceGroupName}${uniqueSuffix}'
   location: location
 }
 
-// Specify existing resource group context for managed identity
-resource existingRg 'Microsoft.Resources/resourceGroups@2021-04-01' existing = {
-  name: rg.name
-}
-
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: '${userAssignedIdentities_GCS_ManagedIdentitiy_name}${uniqueSuffix}'
+// Managed Identity resources
+resource msi 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: managedIdentityName
   location: location
 }
 
 resource federatedIdentityCredentials 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
-  parent: managedIdentity
+  parent: msi
   name: 'ManagedIdentitiyPOC${uniqueSuffix}'
   properties: {
     issuer: 'https://token.actions.githubusercontent.com'
