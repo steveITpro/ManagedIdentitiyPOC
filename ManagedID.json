@@ -1,11 +1,21 @@
 {
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
     "location": {
-        "value": "ukwest"
+      "value": "ukwest"
     },
     "userAssignedIdentities_GCS_ManagedIdentitiy_name": {
-        "value": "GCS_ManagedIdentitiy3"
+      "value": "GCS_ManagedIdentitiy"
     },
     "resourceGroupName": {
-        "value": "MyNewResourceGroup"
+      "value": "GCS_ManagedIdentitytest"
+    },
+    "tags": {
+      "value": {
+        "tagName1": "tagValue1",
+        "tagName2": "tagValue2"
+      }
     }
+  }
 }
