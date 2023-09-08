@@ -1,4 +1,4 @@
-name: Deploy Resource Group
+name: Deploy Managed Identity
 on: [push]
 
 permissions:
@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-deploy:
+  deploy-managed-identity:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo
@@ -19,6 +19,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Deploy Bicep
+    - name: Deploy Managed Identity
       run: |
-        az deployment sub create --location ukwest --template-file resourceGroup.bicep --parameters resourceGroup.parameters.json
+        az deployment group create --resource-group GCS_ManagedIdentitytest7rd --template-file resourceGroup.bicep --parameters resourceGroup.parameters.json
