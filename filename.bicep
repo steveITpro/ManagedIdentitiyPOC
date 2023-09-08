@@ -10,14 +10,13 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-// Managed Identity resources
-resource msi 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+// Reference to an existing Managed Identity
+resource symbolicname 'Microsoft.ManagedIdentity/identities@2023-01-31' existing = {
   name: managedIdentityName
-  location: location
 }
 
 resource federatedIdentityCredentials 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
-  parent: msi
+  parent: symbolicname
   name: 'ManagedIdentitiyPOC${uniqueSuffix}'
   properties: {
     issuer: 'https://token.actions.githubusercontent.com'
