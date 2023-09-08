@@ -20,7 +20,9 @@ resource newManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@20
   name: managedIdentityName
   location: location
   tags: tags
-  scope: resourceGroup(rg.name)
+  dependsOn: [
+    rg
+  ]
 }
 
 resource federatedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
@@ -33,5 +35,7 @@ resource federatedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities/fed
       'api://AzureADTokenExchange'
     ]
   }
-  scope: resourceGroup(rg.name)
+  dependsOn: [
+    newManagedIdentity
+  ]
 }
