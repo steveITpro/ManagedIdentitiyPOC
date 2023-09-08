@@ -1,6 +1,10 @@
 param location string
 param userAssignedIdentities_GCS_ManagedIdentitiy_name string
 param resourceGroupName string
+param tags object = {
+  tagName1: 'tagValue1'
+  tagName2: 'tagValue2'
+}
 
 var uniqueSuffix = substring(uniqueString(deployment().name), 0, 3)
 var managedIdentityName = '${userAssignedIdentities_GCS_ManagedIdentitiy_name}${uniqueSuffix}'
@@ -14,6 +18,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 resource newManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: managedIdentityName
   location: location
+  tags: tags
 }
 
 // Creating federatedIdentityCredentials as a child of the new managed identity
