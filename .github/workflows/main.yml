@@ -1,4 +1,4 @@
-name: Run Azure Login with OpenID Connect
+name: Deploy Managed Identity
 on: [push]
 
 permissions:
@@ -8,9 +8,8 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: 'Checkout code'
+    - name: Checkout repo
       uses: actions/checkout@v2
 
     - name: 'Az CLI login'
@@ -20,10 +19,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Build and deploy Bicep file
+    - name: Deploy Bicep
       run: |
-        # Build the Bicep file
-        bicep build filename.bicep
-        
-        # Deploy the built Bicep file to UK West location using ManagedID.json as the parameters file
-        az deployment sub create --location ukwest --template-file filename.json --parameters @ManagedID.json
+        az deployment sub create --location ukwest --template-file filename.bicep --parameters ManagedID.parameters.json subscriptionId="${{ secrets.AZURE_SUBSCRIPTION_ID }}"
