@@ -20,9 +20,7 @@ resource newManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@20
   name: managedIdentityName
   location: location
   tags: tags
-  dependsOn: [
-    rg
-  ]
+  scope: rg
 }
 
 resource federatedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
@@ -35,7 +33,4 @@ resource federatedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities/fed
       'api://AzureADTokenExchange'
     ]
   }
-  dependsOn: [
-    newManagedIdentity
-  ]
 }
