@@ -11,11 +11,7 @@ resource federatedCredentials 'Microsoft.ManagedIdentity/userAssignedIdentities/
   properties: {
     issuer: 'https://token.actions.githubusercontent.com',
     subject: 'repo:steveITpro/ManagedIdentitiyPOC:ref:refs/heads/Main',
-    audiences: [
-      'api://AzureADTokenExchange'
-    ]
+    audiences: ['api://AzureADTokenExchange']
   }
-  dependsOn: [
-    managedIdentity
-  ]
+  dependsOn: [managedIdentity]
 }
