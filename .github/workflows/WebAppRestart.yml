@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 env:
-  RESOURCE_GROUP: GCS_ManagedIdentitytest7rd
-  WEB_APP_NAME: YourWebAppName
+  RESOURCE_GROUP: SREtestS_group
+  WEB_APP_NAME: SREtest
 
 jobs:
   deploy-managed-identity:
