@@ -1,0 +1,23 @@
+name: Google Home Broadcast Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  google-home-broadcast-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Google Cast PowerShell module
+        run: Install-Module GoogleCast
+
+      - name: Import Google Cast PowerShell module
+        run: Import-Module GoogleCast
+
+      - name: Get API key from secret
+        run: echo "${{ secrets.Google_API_KEY }}"
+
+      - name: Broadcast message to Google Home device
+        run: powershell -Command "Connect-GoogleCastDevice -Name 'My Google Home'; Broadcast-GoogleCastMessage -Message 'This is a test broadcast from GitHub Actions!'; Disconnect-GoogleCastDevice"
