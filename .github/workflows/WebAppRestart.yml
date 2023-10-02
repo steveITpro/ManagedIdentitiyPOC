@@ -1,27 +1,71 @@
-name: Restart Azure Web App
+name: Get AAD Users to JSON
 
 on:
-  repository_dispatch:
-    types: [restart-web-app]
+  schedule:
+    - cron: '0 18 * * 4'
+  workflow_dispatch:  # Manual trigger
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  restart-web-app:
-    runs-on: ubuntu-latest
+  run-script:
+    runs-on: windows-latest  # Use a Windows runner to execute the PowerShell script
+    
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Install and Import Microsoft.Graph module
+        run: |
+          # Check if the Microsoft.Graph module is already imported
+          $module = Get-Module -Name Microsoft.Graph -ListAvailable
+          if (-not $module) {
+              # If not, install and import the module
+              Write-Host "Installing Microsoft.Graph module..."
+              Install-Module -Name Microsoft.Graph -Force -Verbose
+          } else {
+              Write-Host "Microsoft.Graph module is already imported."
+          }
 
-    - name: 'Az CLI login'
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.SUB_PAYG }}
+      - name: Authenticate to Microsoft Graph
+        env:
+          CLIENT_ID: ${{ secrets.AADREPORTINGTOOLGETUSERSINFOCLIENTID }}
+          CLIENT_SECRET: ${{ secrets.AADREPORTINGTOOLGETUSERSINFOSECRET }}
+          TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: |
+          # Authenticate to Microsoft Graph using the provided client ID, client secret, and tenant ID
+          Write-Host "Authenticating to Microsoft Graph..."
+          $secureClientSecret = ConvertTo-SecureString $env:CLIENT_SECRET -AsPlainText -Force
+          $credential = New-Object System.Management.Automation.PSCredential($env:CLIENT_ID, $secureClientSecret)
+          Connect-MgGraph -ClientId $env:CLIENT_ID -TenantId $env:TENANT_ID -ClientCredential $credential
 
-    - name: Restart Azure Web App
-      run: |
-        az webapp restart --name ${{ github.event.client_payload.WEB_APP_NAME }} --resource-group ${{ github.event.client_payload.RESOURCE_GROUP }}
+      - name: Get user list from Microsoft Graph
+        run: |
+          # Get a list of users
+          Write-Host "Retrieving user list from Microsoft Graph..."
+          $users = Get-MgUser
+          $users | Out-File -FilePath "UsersList.txt"
+          Write-Host "User list saved to UsersList.txt"
+
+      - name: Convert user list to JSON and save to file
+        run: |
+          # Read the user list from file
+          Write-Host "Reading user list from file..."
+          $users = Get-Content -Path "UsersList.txt"
+          
+          # Convert user list to JSON
+          Write-Host "Converting user list to JSON..."
+          $usersJson = $users | ConvertTo-Json -Depth 2
+          
+          # Save JSON to file
+          Write-Host "Saving JSON data to file..."
+          $usersJson | Out-File -FilePath "UsersData.json"
+          Write-Host "JSON data saved to UsersData.json"
+
+      - name: Upload JSON file to GitHub
+        uses: actions/upload-artifact@v2
+        with:
+          name: UsersData
+          path: UsersData.json
